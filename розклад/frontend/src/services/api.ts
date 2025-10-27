@@ -24,7 +24,14 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout()
+      // Не викликаємо logout на публічних сторінках
+      const publicPaths = ['/login', '/register', '/verify-email']
+      const isPublicPage = publicPaths.some(path => window.location.pathname.includes(path))
+      
+      if (!isPublicPage) {
+        useAuthStore.getState().logout()
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }
@@ -43,6 +50,16 @@ export const authApi = {
   },
   register: async (data: any) => {
     const response = await api.post('/auth/register', data)
+    return response.data
+  },
+  verifyEmail: async (token: string) => {
+    const response = await api.post('/auth/verify-email', { token })
+    return response.data
+  },
+  resendVerification: async (email: string) => {
+    const response = await api.post('/auth/resend-verification', null, {
+      params: { email }
+    })
     return response.data
   },
 }

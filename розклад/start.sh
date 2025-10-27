@@ -52,7 +52,7 @@ echo -e "${GREEN}✓ Docker запущений${NC}"
 # Зупинка старих контейнерів (якщо є)
 echo ""
 echo -e "${YELLOW}[4/6] Зупинка старих контейнерів / Stopping old containers...${NC}"
-docker-compose down
+docker-compose -p rozklad down
 echo -e "${GREEN}✓ Завершено${NC}"
 
 # Збірка образів
@@ -60,7 +60,7 @@ echo ""
 echo -e "${YELLOW}[5/6] Збірка Docker образів / Building Docker images...${NC}"
 echo -e "${CYAN}Це може зайняти кілька хвилин при першому запуску...${NC}"
 echo -e "${CYAN}This may take several minutes on first run...${NC}"
-if ! docker-compose build; then
+if ! docker-compose -p rozklad build; then
     echo -e "${RED}✗ Помилка при збірці образів${NC}"
     exit 1
 fi
@@ -69,7 +69,7 @@ echo -e "${GREEN}✓ Образи зібрано успішно${NC}"
 # Запуск всіх сервісів
 echo ""
 echo -e "${YELLOW}[6/6] Запуск всіх сервісів / Starting all services...${NC}"
-if ! docker-compose up -d; then
+if ! docker-compose -p rozklad up -d; then
     echo -e "${RED}✗ Помилка при запуску сервісів${NC}"
     exit 1
 fi
@@ -84,7 +84,7 @@ echo ""
 echo -e "${CYAN}========================================${NC}"
 echo -e "${CYAN}  Статус контейнерів / Container Status${NC}"
 echo -e "${CYAN}========================================${NC}"
-docker-compose ps
+docker-compose -p rozklad ps
 
 # Перевірка здоров'я сервісів
 echo ""
@@ -144,17 +144,17 @@ echo -e "${CYAN}  • Backend API:  http://localhost:8000/docs${NC}"
 echo -e "${CYAN}  • Database:     localhost:5432${NC}"
 echo ""
 echo -e "${WHITE}Корисні команди / Useful commands:${NC}"
-echo -e "${YELLOW}  • Логи всіх сервісів:        docker-compose logs -f${NC}"
-echo -e "${YELLOW}  • Логи конкретного сервісу:  docker-compose logs -f [postgres|backend|frontend]${NC}"
-echo -e "${YELLOW}  • Перезапуск:                docker-compose restart${NC}"
-echo -e "${YELLOW}  • Зупинка:                   docker-compose down${NC}"
+echo -e "${YELLOW}  • Логи всіх сервісів:        docker-compose -p rozklad logs -f${NC}"
+echo -e "${YELLOW}  • Логи конкретного сервісу:  docker-compose -p rozklad logs -f [postgres|backend|frontend]${NC}"
+echo -e "${YELLOW}  • Перезапуск:                docker-compose -p rozklad restart${NC}"
+echo -e "${YELLOW}  • Зупинка:                   docker-compose -p rozklad down${NC}"
 echo ""
 echo -e "${WHITE}Показати логи? (y/n): ${NC}"
 read -r choice
 if [ "$choice" = "y" ] || [ "$choice" = "Y" ]; then
     echo ""
     echo -e "${CYAN}Показ логів всіх сервісів (Ctrl+C для виходу)...${NC}"
-    docker-compose logs -f
+    docker-compose -p rozklad logs -f
 fi
 
 

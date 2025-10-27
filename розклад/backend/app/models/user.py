@@ -24,6 +24,7 @@ class User(Base):
     full_name = Column(String, nullable=False)
     role = Column(SQLEnum(UserRole), nullable=False)
     is_active = Column(Boolean, default=True)
+    is_verified = Column(Boolean, default=False)
     phone = Column(String, nullable=True)
     
     # Foreign keys

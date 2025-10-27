@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Optional
 
 
 class Settings(BaseSettings):
@@ -18,6 +18,18 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Rozklad API"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
+    
+    # Email Configuration (Optional)
+    MAIL_USERNAME: Optional[str] = None
+    MAIL_PASSWORD: Optional[str] = None
+    MAIL_FROM: str = "noreply@rozklad.com"
+    MAIL_PORT: int = 587
+    MAIL_SERVER: str = "smtp.gmail.com"
+    MAIL_TLS: bool = True
+    MAIL_SSL: bool = False
+    
+    # Frontend URL (for email links)
+    FRONTEND_URL: str = "http://localhost:5173"
     
     class Config:
         env_file = ".env"

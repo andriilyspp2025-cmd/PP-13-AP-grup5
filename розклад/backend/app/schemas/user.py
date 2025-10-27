@@ -1,5 +1,5 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from pydantic import BaseModel, EmailStr, field_validator
+from typing import Optional, Union
 from datetime import datetime
 from app.models.user import UserRole
 
@@ -8,8 +8,19 @@ class UserBase(BaseModel):
     email: EmailStr
     username: str
     full_name: str
-    role: UserRole
+    role: Union[UserRole, str]  # Приймаємо і enum і string
     phone: Optional[str] = None
+    
+    @field_validator('role', mode='before')
+    @classmethod
+    def validate_role(cls, v):
+        """Convert string to UserRole enum if needed."""
+        if isinstance(v, str):
+            try:
+                return UserRole(v)
+            except ValueError:
+                raise ValueError(f"Invalid role. Must be one of: {', '.join([r.value for r in UserRole])}")
+        return v
 
 
 class UserCreate(UserBase):
@@ -29,6 +40,7 @@ class UserUpdate(BaseModel):
 class UserInDB(UserBase):
     id: int
     is_active: bool
+    is_verified: bool
     institution_id: Optional[int]
     teacher_id: Optional[int]
     group_id: Optional[int]
@@ -46,3 +58,11 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     user_id: Optional[int] = None
 
+
+class EmailVerification(BaseModel):
+    token: str
+
+
+class EmailVerificationResponse(BaseModel):
+    message: str
+    email: str

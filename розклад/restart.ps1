@@ -9,7 +9,7 @@ Write-Host ""
 
 # Перезапуск контейнерів
 Write-Host "Перезапуск всіх контейнерів / Restarting all containers..." -ForegroundColor Yellow
-docker-compose restart
+docker-compose -p rozklad restart
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
@@ -20,7 +20,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "========================================" -ForegroundColor Cyan
     Write-Host "  Статус контейнерів / Container Status" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
-    docker-compose ps
+    docker-compose -p rozklad ps
     
     Write-Host ""
     Write-Host "========================================" -ForegroundColor Cyan

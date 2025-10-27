@@ -25,6 +25,6 @@ class Teacher(Base):
     # Relationships
     institution = relationship("Institution", back_populates="teachers")
     user = relationship("User", back_populates="teacher")
-    schedule_entries = relationship("ScheduleEntry", back_populates="teacher")
-    substituted_entries = relationship("ScheduleEntry", back_populates="substitute_teacher", foreign_keys="ScheduleEntry.substitute_teacher_id")
+    schedule_entries = relationship("ScheduleEntry", back_populates="teacher", foreign_keys="[ScheduleEntry.teacher_id]")
+    substituted_entries = relationship("ScheduleEntry", back_populates="substitute_teacher", foreign_keys="[ScheduleEntry.substitute_teacher_id]")
 

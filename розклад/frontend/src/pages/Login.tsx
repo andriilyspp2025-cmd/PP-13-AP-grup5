@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { authApi } from '../services/api'
 import toast from 'react-hot-toast'
@@ -19,6 +19,8 @@ export default function Login() {
     try {
       const { access_token } = await authApi.login(username, password)
       
+      console.log('✅ Login API successful, token received')
+      
       // Decode JWT to get user info (simplified - in production use a proper JWT decoder)
       const payload = JSON.parse(atob(access_token.split('.')[1]))
       
@@ -32,11 +34,26 @@ export default function Login() {
         institution_id: 1,
       }
       
+      console.log('👤 Setting user:', mockUser.username)
+      
+      // Зберігаємо auth state - zustand persist автоматично збереже в localStorage
       setAuth(mockUser, access_token)
+      
       toast.success('Login successful!')
+      
+      console.log('🚀 Navigating to dashboard...')
+      
+      // Використовуємо navigate - App тепер чекає hydration
       navigate('/')
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Login failed')
+      const errorMessage = error.response?.data?.detail || 'Login failed'
+      
+      // Спеціальне повідомлення для неверифікованого email
+      if (error.response?.status === 403) {
+        toast.error(errorMessage, { duration: 5000 })
+      } else {
+        toast.error(errorMessage)
+      }
     } finally {
       setLoading(false)
     }
@@ -103,9 +120,16 @@ export default function Login() {
           </form>
         </div>
 
-        <div className="text-center text-sm text-gray-600">
-          <p>Demo credentials:</p>
-          <p className="mt-1">Username: <span className="font-semibold">admin</span></p>
+        <div className="text-center text-sm">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
+            Sign up
+          </Link>
+        </div>
+
+        <div className="text-center text-sm text-gray-600 border-t pt-4">
+          <p className="font-medium mb-2">Demo credentials:</p>
+          <p>Username: <span className="font-semibold">admin</span></p>
           <p>Password: <span className="font-semibold">admin123</span></p>
         </div>
       </div>

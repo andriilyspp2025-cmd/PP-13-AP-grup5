@@ -45,7 +45,7 @@ try {
 # Зупинка старих контейнерів (якщо є)
 Write-Host ""
 Write-Host "[4/6] Зупинка старих контейнерів / Stopping old containers..." -ForegroundColor Yellow
-docker-compose down
+docker-compose -p rozklad down
 Write-Host "✓ Завершено" -ForegroundColor Green
 
 # Збірка образів
@@ -53,7 +53,7 @@ Write-Host ""
 Write-Host "[5/6] Збірка Docker образів / Building Docker images..." -ForegroundColor Yellow
 Write-Host "Це може зайняти кілька хвилин при першому запуску..." -ForegroundColor Cyan
 Write-Host "This may take several minutes on first run..." -ForegroundColor Cyan
-docker-compose build
+docker-compose -p rozklad build
 if ($LASTEXITCODE -ne 0) {
     Write-Host "✗ Помилка при збірці образів" -ForegroundColor Red
     exit 1
@@ -63,7 +63,7 @@ Write-Host "✓ Образи зібрано успішно" -ForegroundColor Gre
 # Запуск всіх сервісів
 Write-Host ""
 Write-Host "[6/6] Запуск всіх сервісів / Starting all services..." -ForegroundColor Yellow
-docker-compose up -d
+docker-compose -p rozklad up -d
 if ($LASTEXITCODE -ne 0) {
     Write-Host "✗ Помилка при запуску сервісів" -ForegroundColor Red
     exit 1
@@ -79,7 +79,7 @@ Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Статус контейнерів / Container Status" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
-docker-compose ps
+docker-compose -p rozklad ps
 
 # Перевірка здоров'я сервісів
 Write-Host ""
@@ -148,17 +148,17 @@ Write-Host "  • Backend API:  http://localhost:8000/docs" -ForegroundColor Cya
 Write-Host "  • Database:     localhost:5432" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Корисні команди / Useful commands:" -ForegroundColor White
-Write-Host "  • Логи всіх сервісів:        docker-compose logs -f" -ForegroundColor Yellow
-Write-Host "  • Логи конкретного сервісу:  docker-compose logs -f [postgres|backend|frontend]" -ForegroundColor Yellow
-Write-Host "  • Перезапуск:                docker-compose restart" -ForegroundColor Yellow
-Write-Host "  • Зупинка:                   docker-compose down" -ForegroundColor Yellow
+Write-Host "  • Логи всіх сервісів:        docker-compose -p rozklad logs -f" -ForegroundColor Yellow
+Write-Host "  • Логи конкретного сервісу:  docker-compose -p rozklad logs -f [postgres|backend|frontend]" -ForegroundColor Yellow
+Write-Host "  • Перезапуск:                docker-compose -p rozklad restart" -ForegroundColor Yellow
+Write-Host "  • Зупинка:                   docker-compose -p rozklad down" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Натисніть Enter для виходу або Ctrl+C для перегляду логів..." -ForegroundColor Gray
 $choice = Read-Host "Показати логи? (y/n)"
 if ($choice -eq "y" -or $choice -eq "Y") {
     Write-Host ""
     Write-Host "Показ логів всіх сервісів (Ctrl+C для виходу)..." -ForegroundColor Cyan
-    docker-compose logs -f
+    docker-compose -p rozklad logs -f
 }
 
 

@@ -61,9 +61,9 @@ class ScheduleEntry(Base):
     # Relationships
     group = relationship("Group", back_populates="schedule_entries")
     subject = relationship("Subject", back_populates="schedule_entries")
-    teacher = relationship("Teacher", back_populates="schedule_entries", foreign_keys=[teacher_id])
-    classroom = relationship("Classroom", back_populates="schedule_entries")
+    teacher = relationship("Teacher", back_populates="schedule_entries", foreign_keys="[ScheduleEntry.teacher_id]")
+    classroom = relationship("Classroom", back_populates="schedule_entries", foreign_keys="[ScheduleEntry.classroom_id]")
     time_slot = relationship("TimeSlot", back_populates="schedule_entries")
-    substitute_teacher = relationship("Teacher", back_populates="substituted_entries", foreign_keys=[substitute_teacher_id])
+    substitute_teacher = relationship("Teacher", back_populates="substituted_entries", foreign_keys="[ScheduleEntry.substitute_teacher_id]")
     change_request = relationship("ChangeRequest", back_populates="schedule_entry")
 

@@ -34,5 +34,5 @@ class Classroom(Base):
     
     # Relationships
     institution = relationship("Institution", back_populates="classrooms")
-    schedule_entries = relationship("ScheduleEntry", back_populates="classroom")
+    schedule_entries = relationship("ScheduleEntry", back_populates="classroom", foreign_keys="[ScheduleEntry.classroom_id]")
 

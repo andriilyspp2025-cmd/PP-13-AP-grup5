@@ -18,7 +18,7 @@ echo ""
 
 # Перезапуск контейнерів
 echo -e "${YELLOW}Перезапуск всіх контейнерів / Restarting all containers...${NC}"
-if docker-compose restart; then
+if docker-compose -p rozklad restart; then
     echo ""
     echo -e "${YELLOW}Очікування готовності сервісів / Waiting for services...${NC}"
     sleep 5
@@ -27,7 +27,7 @@ if docker-compose restart; then
     echo -e "${CYAN}========================================${NC}"
     echo -e "${CYAN}  Статус контейнерів / Container Status${NC}"
     echo -e "${CYAN}========================================${NC}"
-    docker-compose ps
+    docker-compose -p rozklad ps
     
     echo ""
     echo -e "${CYAN}========================================${NC}"
